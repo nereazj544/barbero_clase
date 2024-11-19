@@ -1,13 +1,17 @@
 package fp.dam.psp.barbero;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Barberia {
     Semaphore salaEspera;
     Sillon sillon;
 
+    ReentrantLock lock = new ReentrantLock();
+
     public Barberia(int sillas) {
         salaEspera = new Semaphore(sillas);
+        sillon = new Sillon();
     }
 
     public boolean entrarEnSalaDeEspera() {
@@ -18,7 +22,27 @@ public class Barberia {
     }
 
     public void solicitarCortePelo() {
-
+        lock.lock();
+        try {
+            sillon.ocp();
+            salaEspera.release();
+        } finally {
+            lock.unlock();
+            
+        }
     }
 
+    public void finalCP() {
+        sillon.des();
+    }
+
+    public void esCnt() throws InterruptedException{
+        sillon.esCli();
+    }
+
+    public boolean sillonOc(){
+        return sillon.estaOc();
+    }
+
+    // ! END CLASS
 }
