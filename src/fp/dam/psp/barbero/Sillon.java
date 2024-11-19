@@ -14,7 +14,8 @@ public class Sillon {
         lock.lock();
         try {
             oc = true;
-            c.signal();
+            // c.signal();
+            c.signalAll();
         } finally {
             // TODO: handle exception
             lock.unlock();
